@@ -8428,3 +8428,372 @@ export const cleanData: CountryYearDataPoint[] = cleanFlattenedData(JSON.parse(`
     "incomeShareBot50": "0.0854",
     "incomeShareTop1": "0.2044"
 }]`));
+
+export const narrativeFacts = {
+  1980: {
+    "World": [
+      "Early 1980s recession (1980-1983)",
+      "Beginning of Iran-Iraq War"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [
+      "Ronald Reagan elected president",
+      "Iran hostage crisis continues"
+    ],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1981: {
+    "World": [
+      "Early 1980s recession (1980-1983)",
+      "IBM Personal Computer released"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [
+      "Ronald Reagan inaugurated president",
+      "Iran releases 52 US hostages; hostage crisis ends after 444 days",
+      "AIDS epidemic begins"
+    ],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1982: {
+    "World": [
+      "Early 1980s recession (1980-1983)",
+      "Sony releases first commercial CD Player"
+    ],
+    "Argentina": [
+      "Falklands War lasts April to June"
+    ],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [],
+    "United Kingdom": [
+      "Falklands War lasts April to June"
+    ],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1983: {
+    "World": [
+      "Early 1980s recession (1980-1983)"
+    ],
+    "Argentina": [
+      "Dictatorship ends"
+    ],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [
+      "US Embassy bombed in Beirut",
+      "US invades Grenada"
+    ],
+    "United Kingdom": [
+      "Independence of Brunei"
+    ],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1984: {
+    "World": [],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [
+      "UK agrees to hand Hong Kong back to China by 1997"
+    ],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [
+      "Assassination of Indira Gandhi, India Prime Minister",
+      "Bhopal disaster"
+    ],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [],
+    "United Kingdom": [
+      "UK agrees to hand Hong Kong back to China by 1997",
+      "UK Miner's strike 1984-1985"
+    ],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": [
+      "Konstantin Chernenko becomes General Secretary of the Communist Party of the Soviet Union"
+    ]
+  },
+  1985: {
+    "World": [
+      "Release of Macintosh 128K",
+      "Release of Windows 1.0"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [
+      "End of military leadership"
+    ],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [
+      "Release of Nintendo Entertainment System (NES)"
+    ],
+    "United States": [
+      "Beginning of Iran-Contra affair"
+    ],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [
+      "8.0 magnitude earthquake hits Mexico City"
+    ],
+    "Republic of Korea": [],
+    "Russian Federation": [
+      "Mikhail Gorbachev becomes General Secretary of the Communist Party of the Soviet Union"
+    ]
+  },
+  1986: {
+    "World": [
+      "Challenger disaster"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": [
+      "Chernobyl disaster"
+    ]
+  },
+  1987: {
+    "World": [
+      "World population reaches 5 billion",
+      "Black Monday stock market crash occurs"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [
+      "Radiation accident occurs in Goiania"
+    ],
+    "Canada": [],
+    "China": [
+      "Huawei founded"
+    ],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1988: {
+    "World": [
+      "End of the Iran-Iraq War"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [
+      "George H.W. Bush elected president"
+    ],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": [
+      "Perestroika political movement begins"
+    ]
+  },
+  1989: {
+    "World": [
+      "Exxon Valdez spills 10.8 million gallons of crude oil",
+      "Berlin Wall falls",
+      "Revolutions of 1989 and collapse of Soviet Bloc begin; eventually leads to the end of the Cold War"
+    ],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [
+      "First direct Presidential election in Brazil since 1960"
+    ],
+    "Canada": [],
+    "China": [
+      "Tiananmen Square Massacre"
+    ],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [
+      "Akihito becomes Emperor of Japan"
+    ],
+    "United States": [
+      "George H.W. Bush inaugurated president",
+      "US invades Panama"
+    ],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": [
+      "Soviet war in Afghanistan ends"
+    ]
+  },
+  1990: {
+    "World": [],
+    "Argentina": [],
+    "Australia": [],
+    "Brazil": [],
+    "Canada": [],
+    "China": [],
+    "European Union": [],
+    "France": [],
+    "Germany": [],
+    "India": [],
+    "Italy": [],
+    "Indonesia": [],
+    "Japan": [],
+    "United States": [],
+    "United Kingdom": [],
+    "Turkey": [],
+    "South Africa": [],
+    "Saudi Arabia": [],
+    "Mexico": [],
+    "Republic of Korea": [],
+    "Russian Federation": []
+  },
+  1991: {},
+  1992: {},
+  1993: {},
+  1994: {},
+  1995: {},
+  1996: {},
+  1997: {},
+  1998: {},
+  1999: {},
+  2000: {},
+  2001: {},
+  2002: {},
+  2003: {},
+  2004: {},
+  2005: {},
+  2006: {},
+  2007: {},
+  2008: {},
+  2009: {},
+  2010: {},
+  2011: {},
+  2012: {},
+  2013: {},
+  2014: {},
+  2015: {},
+  2016: {},
+  2017: {},
+  2018: {},
+  2019: {},
+}

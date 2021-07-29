@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CountryYearDataPoint} from "../data";
 import {DataServiceService} from "../data-service.service";
 import * as d3 from "d3";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-country-year-bar',
@@ -34,7 +35,7 @@ export class CountryYearBarComponent implements OnInit {
     "#3E215D"
   ];
 
-  constructor(private dataService: DataServiceService) { }
+  constructor(private route: ActivatedRoute, private dataService: DataServiceService) { }
 
   ngOnInit(): void {
     this.getDataPointsByCountry();
@@ -42,7 +43,9 @@ export class CountryYearBarComponent implements OnInit {
     this.render();
   }
 
-  private getDataPointsByCountry(country: string = "World", year: number = 1980): void {
+  private getDataPointsByCountry(): void {
+    const country = String(this.route.snapshot.paramMap.get("country"));
+    const year = Number(this.route.snapshot.paramMap.get("year"));
     console.log(`Loading ${country} ${year}`);
     this.dataService.getDataPointsByCountryYear(country, year).subscribe(data => this.data = data[0]);
   }
@@ -57,6 +60,7 @@ export class CountryYearBarComponent implements OnInit {
   }
 
   private render(): void {
+    console.log(this.data)
     const xScale = d3.scaleBand()
       .domain(this.incomeShareKeysReadable)
       .range([0, this.width - this.margin.right])

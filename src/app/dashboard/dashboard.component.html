@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <div class="row">
+    <div id="sliderLabel" class="col-1">
+      <p>Year</p>
+    </div>
+    <div class="col-2">
+      <ngx-slider [(value)]="value" [options]="options" (userChange)="onYearChange($event)"></ngx-slider>
+    </div>
+  </div>
+  <div class="row">
+    <div id="scatterDiv" class="col-sm"><app-scatter [yearInput]="value"></app-scatter></div>
+    <div id="gdpLineDiv" class="col-sm"><app-gdp-line></app-gdp-line></div>
+  </div>
+  <div class="row"></div>
+</div>

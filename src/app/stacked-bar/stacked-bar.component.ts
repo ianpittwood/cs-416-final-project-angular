@@ -2,6 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {CountryYearDataPoint} from "../data";
 import {DataServiceService} from "../data-service.service";
 import * as d3 from "d3";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-stacked-bar',
@@ -10,10 +11,11 @@ import * as d3 from "d3";
   encapsulation: ViewEncapsulation.None
 })
 export class StackedBarComponent implements OnInit {
+  public year: number = 1980;
   private data: CountryYearDataPoint[] = [];
   private countries: string[] = [];
   private svg: any;
-  private margin = {top: 40, right: 40, bottom: 80, left: 60};
+  private margin = {top: 20, right: 40, bottom: 80, left: 50};
   private width = 750;
   private height = 400;
   private incomeShareKeys = ["incomeShareTop1", "incomeShareNext9", "incomeShareMid40", "incomeShareBot50"];
@@ -24,7 +26,7 @@ export class StackedBarComponent implements OnInit {
     "#3E215D"
   ];
 
-  constructor(private dataService: DataServiceService) { }
+  constructor(private route: ActivatedRoute, private dataService: DataServiceService) { }
 
   ngOnInit(): void {
     this.getCountries();
@@ -33,12 +35,16 @@ export class StackedBarComponent implements OnInit {
     this.render();
   }
 
+  private parseParams(): void {
+    this.year = Number(this.route.snapshot.paramMap.get("year"));
+  }
+
   private getCountries(): void {
     this.dataService.getCountries().subscribe(data => this.countries = data);
   }
 
-  private getDataPointsByYear(year: number = 1980): void {
-    this.dataService.getDataPointsByYear(year).subscribe(data => this.data = data);
+  private getDataPointsByYear(): void {
+    this.dataService.getDataPointsByYear(this.year).subscribe(data => this.data = data);
   }
 
   private createSvg(): void {
@@ -103,6 +109,8 @@ export class StackedBarComponent implements OnInit {
     let rect = groups.selectAll("rect")
       .data((d: any) => {return d;})
       .enter()
+      .append("a")
+      .attr("href", (d: any) => `${window.location.origin}/country/${d.data.country}/year/${this.year}`)
       .append("rect")
       .attr("class", "bar")
       .attr("x", (d: any) => xScale(d.data.country))

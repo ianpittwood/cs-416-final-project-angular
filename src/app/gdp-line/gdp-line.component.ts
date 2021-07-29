@@ -1,9 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {CountryYearDataPoint} from "../data";
+import {ActivatedRoute} from "@angular/router";
 import {DataServiceService} from "../data-service.service";
 import * as d3 from "d3";
-import {roundNearest5} from "../utils";
-import {ActivatedRoute} from "@angular/router";
 
 interface SplitCountryYearDataPoint {
   name: string,
@@ -14,82 +13,71 @@ interface SplitCountryYearDataPoint {
 }
 
 @Component({
-  selector: 'app-country-line',
-  templateUrl: './country-line.component.html',
-  styleUrls: ['./country-line.component.sass'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-gdp-line',
+  templateUrl: './gdp-line.component.html',
+  styleUrls: ['./gdp-line.component.sass']
 })
-export class CountryLineComponent implements OnInit {
-  public country: String = "";
+export class GdpLineComponent implements OnInit {
   private data: CountryYearDataPoint[] = [];
   private splitData: SplitCountryYearDataPoint[] = [];
   private svg: any;
-  private margin = {top: 20, right: 40, bottom: 50, left: 50};
+  private margin = {top: 20, right: 40, bottom: 50, left: 70};
   private width = 750;
-  private height = 400;
-  private incomeShareKeys = ["incomeShareTop1", "incomeShareNext9", "incomeShareMid40", "incomeShareBot50"];
-  private incomeShareKeysReadable = [
-    "Top 1% Income Share", "Next 9% Income Share", "Middle 40% Income Share", "Bottom 50% Income Share"];
-  private segmentColors = [
-    "#ECD662",
-    "#5D8233",
-    "#284E78",
-    "#3E215D"
+  private height = 500;
+  private countryColors = [
+    "#3957ff",
+    "#d3fe14",
+    "#c9080a",
+    "#fec7f8",
+    "#0b7b3e",
+    "#0bf0e9",
+    "#c203c8",
+    "#fd9b39",
+    "#888593",
+    "#906407",
+    "#98ba7f",
+    "#fe6794",
+    "#10b0ff",
+    "#ac7bff",
+    "#fee7c0",
+    "#964c63",
+    "#1da49c",
+    "#0ad811",
+    "#bbd9fd",
+    "#fe6cfe",
+    "#7a041f"
   ];
 
   constructor(private route: ActivatedRoute, private dataService: DataServiceService) { }
 
   ngOnInit(): void {
-    this.parseParams();
+    this.getDimensions();
     this.getDataPointsByCountry();
     this.splitDataByStat(this.data);
     this.createSvg();
     this.render();
   }
 
-  private parseParams(): void {
-    this.country = String(this.route.snapshot.paramMap.get("country"));
+  private getDimensions(): void {
+    this.width = window.innerWidth/2.5;
   }
 
   private getDataPointsByCountry(): void {
-    console.log(`Loading ${this.country}`)
-    this.dataService.getDataPointsByCountry(this.country.toString()).subscribe(data => this.data = data);
+    this.dataService.getAllDataPoints().subscribe(data => this.data = data);
   }
 
   private splitDataByStat(series: CountryYearDataPoint[]): void {
-    let splitData = series.map((datapoint: CountryYearDataPoint) => ({
-      name: "incomeShareBot50",
-      index: 3,
-      country: datapoint.country,
-      year: datapoint.year,
-      value: datapoint.incomeShareBot50,
-    }));
-    splitData = splitData.concat(series.map((datapoint: CountryYearDataPoint) => ({
-      name: "incomeShareMid40",
-      index: 2,
-      country: datapoint.country,
-      year: datapoint.year,
-      value: datapoint.incomeShareMid40,
-    })));
-    splitData = splitData.concat(series.map((datapoint: CountryYearDataPoint) => ({
-      name: "incomeShareNext9",
-      index: 1,
-      country: datapoint.country,
-      year: datapoint.year,
-      value: datapoint.incomeShareNext9,
-    })));
-    splitData = splitData.concat(series.map((datapoint: CountryYearDataPoint) => ({
-      name: "incomeShareTop1",
+    this.splitData = series.map((datapoint: CountryYearDataPoint) => ({
+      name: "gdpPerCapita",
       index: 0,
       country: datapoint.country,
       year: datapoint.year,
-      value: datapoint.incomeShareTop1,
-    })));
-    this.splitData = splitData;
+      value: datapoint.gdpPerCapita,
+    }));
   }
 
   private createSvg(): void {
-    this.svg = d3.select("figure#country-line")
+    this.svg = d3.select("figure#gdp-line")
       .append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
@@ -107,12 +95,9 @@ export class CountryLineComponent implements OnInit {
 
   private render(): void {
     const parseTime = d3.timeParse("%Y");
-    let maxIncomeShare: number | undefined = d3.max(
+    let maxGdp: number | undefined = d3.max(
       this.data.flatMap((datapoint: CountryYearDataPoint) => ([
-        datapoint.incomeShareTop1,
-        datapoint.incomeShareNext9,
-        datapoint.incomeShareMid40,
-        datapoint.incomeShareBot50
+        datapoint.gdpPerCapita
       ])));
 
 
@@ -121,21 +106,21 @@ export class CountryLineComponent implements OnInit {
       .domain(d3.extent(this.data, function(d) {return parseTime(d.year);}))
       .range([0, this.width - this.margin.right]);
     const yScale = d3.scaleLinear()
-      .domain([0, roundNearest5(maxIncomeShare)])
+      .domain([0, Number(maxGdp) + 1000])
       .range([this.height, this.margin.top]);
 
     // X Axis Gridlines
     this.svg.append("g")
       .attr("class", "grid")
       .attr("transform", `translate(0,${String(this.height)})`)
-      .call(CountryLineComponent.xGridlines(xScale)
+      .call(GdpLineComponent.xGridlines(xScale)
         .tickSize(-this.height + this.margin.top)
         // @ts-ignore
         .tickFormat("")
       );
     this.svg.append("g")
       .attr("class", "grid")
-      .call(CountryLineComponent.yGridlines(yScale)
+      .call(GdpLineComponent.yGridlines(yScale)
         .tickSize(-this.width + this.margin.right)
         // @ts-ignore
         .tickFormat("")
@@ -162,14 +147,14 @@ export class CountryLineComponent implements OnInit {
       .attr("x", 0 - (this.height/2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text("% of Income")
+      .text("GDP per capita (current USD)")
 
-    let groupedData = d3.group(this.splitData, d => d.name);
-    let groupNames = Array.from(groupedData.keys());
+    let groupedData = d3.group(this.splitData, d => d.country);
+    let groupNames = Array.from(groupedData.keys()).sort();
 
     let colorScale = d3.scaleOrdinal()
       .domain(groupNames)
-      .range(this.segmentColors);
+      .range(this.countryColors);
 
     this.svg.append("g")
       .selectAll("path")
@@ -190,5 +175,4 @@ export class CountryLineComponent implements OnInit {
           (d[1])
       })
   }
-
 }
