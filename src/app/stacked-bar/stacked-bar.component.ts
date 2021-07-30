@@ -12,13 +12,15 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class StackedBarComponent implements OnInit {
   public year: number = 1980;
+  public aggregateData!: CountryYearDataPoint;
+  public worldEvents: Array<string> = [];
   private data: CountryYearDataPoint[] = [];
   private countries: string[] = [];
   private svg: any;
   private margin = {top: 20, right: 40, bottom: 80, left: 50};
-  private width = 750;
-  private height = 400;
-  private incomeShareKeys = ["incomeShareTop1", "incomeShareNext9", "incomeShareMid40", "incomeShareBot50"];
+  private width = 500;
+  private height = 500;
+  private incomeShareKeys = ["incomeShareBot50", "incomeShareMid40", "incomeShareNext9", "incomeShareTop1"];
   private segmentColors = [
     "#ECD662",
     "#5D8233",
@@ -26,25 +28,55 @@ export class StackedBarComponent implements OnInit {
     "#3E215D"
   ];
 
+  public isNotMinYear() {
+    return (this.year - 1) >= 1980;
+  }
+
+  public isNotMaxYear() {
+    return (this.year + 1) <= 2019;
+  }
+
   constructor(private route: ActivatedRoute, private dataService: DataServiceService) { }
 
   ngOnInit(): void {
+    this.parseParams();
     this.getCountries();
+    this.getAggregateDataByYear();
     this.getDataPointsByYear();
+    this.getNarrativeEvents();
     this.createSvg();
     this.render();
   }
 
+  ngOnChanges(): void {
+    this.getDataPointsByYear();
+    this.getAggregateDataByYear();
+    this.getNarrativeEvents();
+    this.getSvg();
+    this.render();
+  }
+
   private parseParams(): void {
-    this.year = Number(this.route.snapshot.paramMap.get("year"));
+    this.route.params.subscribe(params => {
+      this.year = Number(params["year"]);
+      this.ngOnChanges();
+    })
   }
 
   private getCountries(): void {
     this.dataService.getCountries().subscribe(data => this.countries = data);
   }
 
+  private getAggregateDataByYear(): void {
+    this.dataService.getG20AggregateData(this.year).subscribe(data => this.aggregateData = data)
+  }
+
   private getDataPointsByYear(): void {
     this.dataService.getDataPointsByYear(this.year).subscribe(data => this.data = data);
+  }
+
+  private getNarrativeEvents(): void {
+    this.dataService.getWorldEventsForYear(this.year).subscribe(data => this.worldEvents = data);
   }
 
   private createSvg(): void {
@@ -52,6 +84,11 @@ export class StackedBarComponent implements OnInit {
       .append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom);
+  }
+
+  private getSvg(): void {
+    d3.selectAll("figure#stacked-bar > svg > *").remove();
+    this.svg = d3.select("figure#stacked-bar").select("svg");
   }
 
   private render(): void {
@@ -80,7 +117,7 @@ export class StackedBarComponent implements OnInit {
 
     // Apply X Axis label
     this.svg.append("text")
-      .attr("transform", `translate(${this.width/2},${this.height + this.margin.top + 70})`)
+      .attr("transform", `translate(${this.width/2},${this.height + this.margin.top + 75})`)
       .style("text-anchor", "middle")
       .text("Country")
     // Apply Y Axis label
@@ -92,7 +129,38 @@ export class StackedBarComponent implements OnInit {
       .style("text-anchor", "middle")
       .text("% of Income")
 
-    let stacker = d3.stack().keys(this.incomeShareKeys)
+    let colorScale = d3.scaleOrdinal()
+      .domain(this.incomeShareKeys)
+      .range(this.segmentColors);
+
+    let tooltip = d3.select("div#chartRow").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    let tipMouseover = function(event: { clientX: number; clientY: number; }, d: any) {
+      let html = `<strong>${d.data.country}</strong><br>
+Total Population: ${(d.data.totalPopulation/1000000).toFixed(2)} million<br>
+GDP: $${(d.data.gdp/1000000000).toFixed(2)} billion<br>
+GDP per capita: $${d.data.gdpPerCapita.toFixed(2)}<br>
+Top 1%: ${d.data.incomeShareTop1.toFixed(2)}%<br>
+Next 9%: ${d.data.incomeShareNext9.toFixed(2)}%<br>
+Middle 40%: ${d.data.incomeShareMid40.toFixed(2)}%<br>
+Bottom 50%: ${d.data.incomeShareBot50.toFixed(2)}%<br>`;
+      tooltip.html(html)
+        .style("left", (event.clientX + 15) + "px")
+        .style("top", (event.clientY) + "px")
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+    }
+
+    let tipMouseout = function(d: CountryYearDataPoint) {
+      tooltip.transition()
+        .duration(300)
+        .style("opacity", 0)
+    }
+
+    let stacker = d3.stack().keys(this.incomeShareKeys);
     // @ts-ignore
     let stackData = stacker(this.data);
     console.log(stackData)
@@ -100,7 +168,7 @@ export class StackedBarComponent implements OnInit {
       .data(stackData)
       .enter()
       .append("g")
-      .style("fill", (d: any,i: number) => {return this.segmentColors[i];})
+      .style("fill", (d: { key: string; }) => colorScale(d.key))
 
     groups.exit().remove();
 
@@ -116,7 +184,9 @@ export class StackedBarComponent implements OnInit {
       .attr("x", (d: any) => xScale(d.data.country))
       .attr("width", (d: any) => xScale.bandwidth())
       .attr("y", (d: any) => yScale(d[1]))
-      .attr("height", (d: any) => {return yScale(d[0]) - yScale(d[1])});
+      .attr("height", (d: any) => {return yScale(d[0]) - yScale(d[1])})
+      .on("mouseover", tipMouseover)
+      .on("mouseout", tipMouseout);
   }
 
 }

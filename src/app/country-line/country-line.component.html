@@ -1,2 +1,58 @@
-<h3>{{this.country}} Income Inequality 1980-2019</h3>
-<figure id="country-line"></figure>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col" style="text-align: center"><a routerLink="/main">Return Home</a></div>
+  </div>
+  <div class="row"><h3>{{this.country}} Income Inequality 1980-2019</h3></div>
+  <div class="row">
+    <div class="col"><figure id="country-line"></figure></div>
+    <div class="col">
+      <div class="container-fluid">
+        <div class="row"><h6>Change from 1980-2019</h6></div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP per capita</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataGDPPerCapitaValueHtml()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">Gini coefficient</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataGiniCoefficient()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #ECD662"></div>Income Share Bottom 50%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataBottom50Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #5D8233"></div>Income Share Middle 40%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataMid40Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #284E78"></div>Income Share Next 9%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataNext9Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #3E215D"></div>Income Share Top 1%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataTop1Html()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <p>
+      {{country}}'s inequality has gotten
+      <span *ngIf="inequalityImproved()">better</span>
+      <span *ngIf="!inequalityImproved()">worse</span>
+      since 1980. The Gini coefficient moved by {{this.changeData.giniCoefficientChange.toFixed(3)}},
+      indicating overall
+      <span *ngIf="inequalityImproved()">improvements leading to increased equality among its population.</span>
+      <span *ngIf="!inequalityImproved()">setbacks leading to increased inequality among its population.</span>
+    </p>
+    <p>
+      The Top 10% of earners had a {{this.changeData.incomeShareTop10Change.toFixed(2)}}%
+      <span *ngIf="top10Increased()">increase</span>
+      <span *ngIf="!top10Increased()">decrease</span>
+      in income. The Bottom 50% of earners saw a {{this.changeData.incomeShareBot50Change.toFixed(2)}}%
+      <span *ngIf="bot50Increased()">increase</span>
+      <span *ngIf="!bot50Increased()">decrease</span>.
+    </p>
+  </div>
+</div>
+

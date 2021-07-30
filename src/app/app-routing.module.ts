@@ -7,6 +7,7 @@ import {StackedBarComponent} from "./stacked-bar/stacked-bar.component";
 import {CountryYearBarComponent} from "./country-year-bar/country-year-bar.component";
 import {GdpLineComponent} from "./gdp-line/gdp-line.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {CountryYearPieComponent} from "./country-year-pie/country-year-pie.component";
 
 const routes: Routes = [
   {path: "", redirectTo: "/main", pathMatch: "full"},

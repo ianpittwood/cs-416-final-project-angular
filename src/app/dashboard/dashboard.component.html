@@ -1,15 +1,72 @@
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div id="sliderLabel" class="col-1">
-      <p>Year</p>
+    <div id="sliderLabel" class="col-1 mt-3">
+      <p>Year:</p>
     </div>
-    <div class="col-2">
+    <div class="col-3">
       <ngx-slider [(value)]="value" [options]="options" (userChange)="onYearChange($event)"></ngx-slider>
     </div>
+    <div class="col-2 mt-3"><a routerLink="/year/{{value}}"><button class="btn-primary">View Year Details</button></a></div>
   </div>
-  <div class="row">
-    <div id="scatterDiv" class="col-sm"><app-scatter [yearInput]="value"></app-scatter></div>
-    <div id="gdpLineDiv" class="col-sm"><app-gdp-line></app-gdp-line></div>
+  <div class="row" id="chartRow">
+    <div id="scatterDiv" class="col"><app-scatter [yearInput]="value"></app-scatter></div>
+    <div class="col">
+      <div class="container-fluid">
+        <div class="row"><h6>Aggregate Change in the G20 from 1980-{{value}}</h6></div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP per capita</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataGDPPerCapitaValueHtml()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">Gini coefficient</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataGiniCoefficient()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #3E215D"></div>Income Share Top 1%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataTop1Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #284E78"></div>Income Share Next 9%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataNext9Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #5D8233"></div>Income Share Middle 40%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataMid40Html()"></div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #ECD662"></div>Income Share Bottom 50%</div>
+          <div class="col dataEntry" [innerHTML]="getChangeDataBottom50Html()"></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="row"></div>
+  <div class="row ml-5 mr-5 mt-3">
+    <div id="introText" class="col">
+      <p>
+        <span class="lead">Income inequality has been a growing source of debate in recent years.</span>
+        While country's GDPs have been steadily raising over time, that new wealth hasn't made it to everyone. Over
+        time, more wealth has continued to accumulate for the highest earners of society while the majority
+        of the population has seen their wages stagnate. For some, the growth in wages has even been eclipsed by
+        inflation. It's important for us to track and attempt to reduce inequality to avoid its worst effects on
+        society, such as health problems, homelessness, and crime.
+      </p>
+      <p>
+        This project uses a multitude of metrics available from the World Bank and World Inequality Database
+        to visualize the growing problem of inequality in the globe's richest nations, the G20. The core metric for
+        measuring inequality is the Gini coefficient, which compares the cumulative proportions  of the population
+        against the cumulative proportions of the income they receive. It ranges from 0, indicating perfect equality,
+        to 1, indicating perfect inequality. Theoretically, it can reach values beyond 1 in the case of massive debt
+        or negative income in a portion of society.
+      </p>
+      <p>
+        A variety of other metrics are also provided. GDP and GDP per capita help convey the overall wealth and growth
+        in wealth for a country. Income share breakdowns are also provides for all data points, showing the percentage
+        of income going to each portion of society: the Top 1% of earners, the Next 9%, the Middle 40%, and the
+        Bottom 50% of earners.
+      </p>
+      <p>
+        <strong>Click on a country on the scatter plot or click "View Year Details" to learn more!</strong>
+      </p>
+    </div>
+  </div>
 </div>

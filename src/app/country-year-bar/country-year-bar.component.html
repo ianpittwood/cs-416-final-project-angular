@@ -1,1 +1,68 @@
-<figure id="country-year-bar"></figure>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col">
+      <a routerLink="/country/{{country}}/year/{{year - 1}}" *ngIf="isNotMinYear()"><- Previous Year</a>
+      <span *ngIf="!isNotMinYear()"><- Previous Year</span>
+    </div>
+    <div class="col" style="text-align: center"><a routerLink="/main">Return Home</a></div>
+    <div class="col" style="text-align: right">
+      <a routerLink="/country/{{country}}/year/{{year + 1}}" *ngIf="isNotMaxYear()">Next Year -></a>
+      <span *ngIf="!isNotMaxYear()">Next Year -></span>
+    </div>
+  </div>
+  <div class="row"><h3>Income Distribution of {{country}} in {{year}}</h3></div>
+  <div class="row">
+    <div class="col"><figure id="country-year-bar"></figure></div>
+    <div class="col">
+      <div class="container-fluid">
+        <div class="row"><h5>{{country}} Metrics in {{year}}</h5></div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP in billions (current USD)</div>
+          <div class="col dataEntry">${{(data.gdp/1000000000).toFixed(2)}} billion</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP per capita (current USD)</div>
+          <div class="col dataEntry">${{data.gdpPerCapita.toFixed(2)}}</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">Gini coefficient</div>
+          <div class="col dataEntry">{{data.giniCoefficient.toFixed(3)}}</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #3E215D"></div>Income Share Top 1%</div>
+          <div class="col dataEntry">{{data.incomeShareTop1.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #284E78"></div>Income Share Next 9%</div>
+          <div class="col dataEntry">{{data.incomeShareNext9.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #5D8233"></div>Income Share Middle 40%</div>
+          <div class="col dataEntry">{{data.incomeShareMid40.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #ECD662"></div>Income Share Bottom 50%</div>
+          <div class="col dataEntry">{{data.incomeShareBot50.toFixed(2)}}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col events">
+      <h4>World Events</h4>
+      <ul>
+        <li *ngFor="let event of worldEvents">
+          {{event}}
+        </li>
+      </ul>
+      <div *ngIf="isNotWorld()">
+        <h4>{{country}} Events</h4>
+        <ul>
+          <li *ngFor="let event of countryEvents">
+            {{event}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

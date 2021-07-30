@@ -18,7 +18,7 @@ export class ScatterComponent implements OnInit {
   private countries: string[] = [];
   private svg: any;
   private margin = {top: 20, right: 40, bottom: 50, left: 70};
-  private width = 750;
+  private width = 600;
   private height = 500;
   private countryColors = [
     "#3957ff",
@@ -47,7 +47,6 @@ export class ScatterComponent implements OnInit {
   constructor(private dataService: DataServiceService) { }
 
   ngOnInit(): void {
-    this.getDimensions();
     this.getCountries();
     this.resolveInput();
     this.getDataPointsByYear();
@@ -56,16 +55,11 @@ export class ScatterComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    this.getDimensions();
     this.getCountries();
     this.resolveInput();
     this.getDataPointsByYear();
     this.getSvg();
-    this.updateData();
-  }
-
-  private getDimensions(): void {
-    this.width = window.innerWidth/2.5;
+    this.render();
   }
 
   private getCountries(): void {
@@ -89,6 +83,7 @@ export class ScatterComponent implements OnInit {
   }
 
   private getSvg(): void {
+    d3.selectAll("figure#scatter > svg > *").remove();
     this.svg = d3.select("figure#scatter").select("svg");
   }
 
@@ -101,31 +96,27 @@ export class ScatterComponent implements OnInit {
   }
 
   private render(): void {
-    let maxIncomeShare: number | undefined = d3.max(
-      this.data.flatMap((datapoint: CountryYearDataPoint) => ([
-        datapoint.incomeShareTop10,
-        datapoint.incomeShareBot50
-    ])));
-    let maxGDPPerCapita: number | undefined = d3.max(
-      this.data.flatMap((datapoint: CountryYearDataPoint) => datapoint.gdpPerCapita
-    ));
+    let maxGDP: number;
+    // @ts-ignore
+    maxGDP = d3.max(
+      this.data.flatMap((datapoint: CountryYearDataPoint) => datapoint.gdp
+      ))/1000000000;
+    let maxPopulation: number;
+    // @ts-ignore
+    maxPopulation = d3.max(
+      this.data.flatMap((datapoint: CountryYearDataPoint) => datapoint.totalPopulation
+      ));
 
     const xScale = d3.scaleLinear()
-      .domain([0, roundNearest5(maxIncomeShare)])
+      .domain([0, 1])
       .range([0, this.width - this.margin.right]);
-    const yScale = d3.scaleLinear()
-      .domain([0, roundNearest5(maxIncomeShare)])
+    const yScale = d3.scaleLog()
+      .domain([10, 100000])
       .range([this.height, this.margin.top]);
     this.countries.sort();
     const colorScale = d3.scaleOrdinal(this.countries, this.countryColors)
       .unknown("black");
-    let rScale: d3.ScalePower<number, number, never>;
-    if (typeof maxGDPPerCapita === "number") {
-      rScale = d3.scaleSqrt([0, Math.sqrt(maxGDPPerCapita)], [0, 32]);
-    }
-    else {
-      rScale = d3.scaleSqrt([0, 32], [0, 32]);
-    }
+    let rScale = d3.scaleSqrt([0, Math.sqrt(maxPopulation)], [0, 32]);
 
     // X Axis Gridlines
     this.svg.append("g")
@@ -136,6 +127,7 @@ export class ScatterComponent implements OnInit {
         // @ts-ignore
         .tickFormat("")
       );
+    // Y Axis Gridlines
     this.svg.append("g")
       .attr("class", "grid")
       .attr("transform", `translate(${String(this.margin.left)},${String(this.margin.top)})`)
@@ -150,28 +142,55 @@ export class ScatterComponent implements OnInit {
       .call(d3.axisBottom(xScale));
     let yAxis = this.svg.append("g")
       .attr("transform", `translate(${String(this.margin.left)},${String(this.margin.top)})`)
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale).ticks(5, "~g"));
 
     let g = this.svg.append("g")
       .attr("transform", `translate(${String(this.margin.left)},${String(this.margin.top)})`);
 
     // Apply X Axis label
     this.svg.append("text")
-      .attr("transform", `translate(${this.width/2 + this.margin.left},${this.height + this.margin.top + 40})`)
+      .attr("transform", `translate(${this.width / 2 + this.margin.left},${this.height + this.margin.top + 40})`)
       .style("text-anchor", "middle")
-      .text("Bottom 50% of Population % of Income")
+      .text("Gini coefficient")
     // Apply Y Axis label
     this.svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
-      .attr("x", 0 - (this.height/2 + this.margin.top))
+      .attr("x", 0 - (this.height / 2 + this.margin.top))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text("Top 10% of Population % of Income")
+      .text("GDP in billions of $ (current USD)")
 
-    this.data.sort(function(a, b) {
-      return b.gdpPerCapita - a.gdpPerCapita;
+    this.data.sort(function (a, b) {
+      return b.totalPopulation - a.totalPopulation;
     });
+
+    let tooltip = d3.select("div#chartRow").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    let tipMouseover = function(event: { clientX: number; clientY: number; }, d: CountryYearDataPoint) {
+      let html = `<div class="color-box" style="background-color: ${colorScale(d.country)}"></div><strong>${d.country}</strong><br>
+Total Population: ${(d.totalPopulation/1000000).toFixed(2)} million<br>
+GDP: $${(d.gdp/1000000000).toFixed(2)} billion<br>
+GDP per capita: $${d.gdpPerCapita.toFixed(2)}<br>
+Top 1%: ${d.incomeShareTop1.toFixed(2)}%<br>
+Next 9%: ${d.incomeShareNext9.toFixed(2)}%<br>
+Middle 40%: ${d.incomeShareMid40.toFixed(2)}%<br>
+Bottom 50%: ${d.incomeShareBot50.toFixed(2)}%<br>`;
+      tooltip.html(html)
+        .style("left", (event.clientX + 15) + "px")
+        .style("top", (event.clientY - 30) + "px")
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+    }
+
+    let tipMouseout = function(d: CountryYearDataPoint) {
+      tooltip.transition()
+        .duration(300)
+        .style("opacity", 0)
+    }
 
     const update = g.attr("stroke", "black")
       .selectAll("circle")
@@ -191,72 +210,17 @@ export class ScatterComponent implements OnInit {
       .append("circle")
       .attr("class", "point")
       .attr("cx", function (d: CountryYearDataPoint) {
-        return xScale(d.incomeShareBot50)
+        console.log(d)
+        return xScale(d.giniCoefficient)
       })
       .attr("cy", function (d: CountryYearDataPoint) {
-        return yScale(d.incomeShareTop10)
+        return yScale(d.gdp/1000000000)
       })
       .attr("r", function (d: CountryYearDataPoint) {
-        return rScale(Math.sqrt(d.gdpPerCapita))
+        return rScale(Math.sqrt(d.totalPopulation))
       })
       .attr("fill", (d: CountryYearDataPoint) => colorScale(d.country))
+      .on("mouseover", tipMouseover)
+      .on("mouseout", tipMouseout)
   }
-
-  private updateData(): void {
-    console.log(this.data)
-    let maxIncomeShare: number | undefined = d3.max(
-      this.data.flatMap((datapoint: CountryYearDataPoint) => ([
-        datapoint.incomeShareTop10,
-        datapoint.incomeShareBot50
-      ])));
-    let maxGDPPerCapita: number | undefined = d3.max(
-      this.data.flatMap((datapoint: CountryYearDataPoint) => datapoint.gdpPerCapita
-      ));
-
-    const xScale = d3.scaleLinear()
-      .domain([0, roundNearest5(maxIncomeShare)])
-      .range([0, this.width - this.margin.right]);
-    const yScale = d3.scaleLinear()
-      .domain([0, roundNearest5(maxIncomeShare)])
-      .range([this.height, this.margin.top]);
-    this.countries.sort();
-    const colorScale = d3.scaleOrdinal(this.countries, this.countryColors)
-      .unknown("black");
-    let rScale: d3.ScalePower<number, number, never>;
-    if (typeof maxGDPPerCapita === "number") {
-      rScale = d3.scaleSqrt([0, Math.sqrt(maxGDPPerCapita)], [0, 32]);
-    }
-    else {
-      rScale = d3.scaleSqrt([0, 32], [0, 32]);
-    }
-
-    let g = this.svg.select("g");
-
-    const update = g.attr("stroke", "black")
-      .selectAll("circle")
-      .data(this.data);
-
-    update.exit()
-      .remove();
-
-    update
-      .enter()
-      .append("a")
-      .attr("href", (d: CountryYearDataPoint) => `${window.location.origin}/country/${d.country}`)
-      .append("circle")
-      .transition()
-      .duration(500)
-      .attr("class", "point")
-      .attr("cx", function (d: CountryYearDataPoint) {
-        return xScale(d.incomeShareBot50)
-      })
-      .attr("cy", function (d: CountryYearDataPoint) {
-        return yScale(d.incomeShareTop10)
-      })
-      .attr("r", function (d: CountryYearDataPoint) {
-        return rScale(Math.sqrt(d.gdpPerCapita))
-      })
-      .attr("fill", (d: CountryYearDataPoint) => colorScale(d.country))
-  }
-
 }

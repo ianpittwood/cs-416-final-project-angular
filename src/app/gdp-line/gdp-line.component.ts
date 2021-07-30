@@ -156,7 +156,47 @@ export class GdpLineComponent implements OnInit {
       .domain(groupNames)
       .range(this.countryColors);
 
-    this.svg.append("g")
+    let tooltip = d3.select("figure#scatter").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+    let tooltipLine = this.svg.append("line");
+
+    let tipMousemove = function(event: { layerX: d3.NumberValue; clientX: number; clientY: number; }, d: CountryYearDataPoint) {
+      const year = Math.floor((xScale.invert(event.layerX).getFullYear() + 5) / 10) * 10;
+      console.log(year);
+
+      let html = `<div class="color-box" style="background-color: ${colorScale(d.country)}"></div><strong>${d.country}</strong><br>
+GDP per capita: $${d.gdpPerCapita.toFixed(2)}<br>`;
+
+      tooltipLine.attr("stroke", "black")
+        .attr("x1", xScale(year))
+        .attr("x2", xScale(year))
+        .attr("y1", 0)
+        .attr("y2", 500);
+
+      tooltip.html(html)
+        .style("left", (event.clientX + 15) + "px")
+        .style("top", (event.clientY - 30) + "px")
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+    }
+
+    let tipMouseout = function(d: CountryYearDataPoint) {
+      if (tooltip) {
+        tooltip.transition()
+          .duration(300)
+          .style("display", "none");
+      }
+      if (tooltipLine) {
+        tooltipLine.transition()
+          .duration(300)
+          .attr("stroke", "none");
+      }
+    }
+
+    let chart = this.svg.append("g")
+    chart
       .selectAll("path")
       .attr("transform", `translate(${String(this.margin.left)},${String(this.margin.top)})`)
       .data(groupedData)
@@ -173,6 +213,12 @@ export class GdpLineComponent implements OnInit {
           // @ts-ignore
           .y(d => yScale(d.value))
           (d[1])
-      })
+      });
+    let tipBox = chart.append("rect")
+      .attr("width", this.width)
+      .attr("height", this.height)
+      .attr("opacity", 0)
+      .on("mousemove", tipMousemove)
+      .on("mouseout", tipMouseout)
   }
 }

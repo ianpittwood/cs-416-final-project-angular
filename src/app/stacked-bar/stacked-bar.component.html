@@ -1,2 +1,62 @@
-<h3>Income Distributions of the G20 in {{this.year}}</h3>
-<figure id="stacked-bar"></figure>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col">
+      <a routerLink="/year/{{year - 1}}" *ngIf="isNotMinYear()"><- Previous Year</a>
+      <span *ngIf="!isNotMinYear()"><- Previous Year</span>
+    </div>
+    <div class="col" style="text-align: center"><a routerLink="/main">Return Home</a></div>
+    <div class="col" style="text-align: right">
+      <a routerLink="/year/{{year + 1}}" *ngIf="isNotMaxYear()">Next Year -></a>
+      <span *ngIf="!isNotMaxYear()">Next Year -></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col"><h3>Income Distributions of the G20 in {{this.year}}</h3></div>
+  </div>
+  <div class="row" id="chartRow">
+    <div class="col"><figure id="stacked-bar"></figure></div>
+    <div class="col">
+      <div class="container-fluid">
+        <div class="row"><h5>Aggregate G20 Metrics in {{year}}</h5></div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP in billions (current USD)</div>
+          <div class="col dataEntry">${{(aggregateData.gdp/1000000000).toFixed(2)}} billion</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">GDP per capita (current USD)</div>
+          <div class="col dataEntry">${{aggregateData.gdpPerCapita.toFixed(2)}}</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel">Gini coefficient</div>
+          <div class="col dataEntry">{{aggregateData.giniCoefficient.toFixed(3)}}</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #3E215D"></div>Income Share Top 1%</div>
+          <div class="col dataEntry">{{aggregateData.incomeShareTop1.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #284E78"></div>Income Share Next 9%</div>
+          <div class="col dataEntry">{{aggregateData.incomeShareNext9.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #5D8233"></div>Income Share Middle 40%</div>
+          <div class="col dataEntry">{{aggregateData.incomeShareMid40.toFixed(2)}}%</div>
+        </div>
+        <div class="row statRow">
+          <div class="col dataLabel"><div class="color-box" style="background-color: #ECD662"></div>Income Share Bottom 50%</div>
+          <div class="col dataEntry">{{aggregateData.incomeShareBot50.toFixed(2)}}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col events">
+      <h4>World Events</h4>
+      <ul>
+        <li *ngFor="let event of worldEvents">
+          {{event}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

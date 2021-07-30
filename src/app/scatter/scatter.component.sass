@@ -2,7 +2,7 @@
   padding-left: 5%
   g
     .point
-      transition: all 0.2s
+      transition: all 0.3s
       fill-opacity: 0.7
 
       &:hover
@@ -23,3 +23,22 @@
 
 .grid path
   stroke-width: 0
+
+.tooltip
+  .color-box
+    width: 10px
+    height: 10px
+    display: inline-block
+    position: absolute
+    left: 5px
+    top: 5px
+  strong
+    padding-left: 15px
+  position: absolute
+  font-size: 12px
+  width: auto
+  height: auto
+  padding: 2px
+  border: solid
+  pointer-events: none
+  background-color: white
