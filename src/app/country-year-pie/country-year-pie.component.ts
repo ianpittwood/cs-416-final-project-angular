@@ -49,7 +49,6 @@ export class CountryYearPieComponent implements OnInit {
   private getDataPointsByCountry(): void {
     this.country = String(this.route.snapshot.paramMap.get("country"));
     this.year = Number(this.route.snapshot.paramMap.get("year"));
-    console.log(`Loading ${this.country} ${this.year}`);
     this.dataService.getDataPointsByCountryYear(this.country,this.year).subscribe(data => this.data = data[0]);
   }
 

@@ -75,7 +75,6 @@ export class ScatterComponent implements OnInit {
   }
 
   private createSvg(): void {
-    console.log(this.width)
     this.svg = d3.select("figure#scatter")
       .append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -210,7 +209,6 @@ Bottom 50%: ${d.incomeShareBot50.toFixed(2)}%<br>`;
       .append("circle")
       .attr("class", "point")
       .attr("cx", function (d: CountryYearDataPoint) {
-        console.log(d)
         return xScale(d.giniCoefficient)
       })
       .attr("cy", function (d: CountryYearDataPoint) {

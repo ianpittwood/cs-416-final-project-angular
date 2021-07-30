@@ -163,7 +163,6 @@ Bottom 50%: ${d.data.incomeShareBot50.toFixed(2)}%<br>`;
     let stacker = d3.stack().keys(this.incomeShareKeys);
     // @ts-ignore
     let stackData = stacker(this.data);
-    console.log(stackData)
     let groups = g.selectAll("g.share")
       .data(stackData)
       .enter()

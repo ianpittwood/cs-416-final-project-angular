@@ -79,7 +79,6 @@ export class CountryYearBarComponent implements OnInit {
   }
 
   private getDataPointsByCountryYear(): void {
-    console.log(`Loading ${this.country} ${this.year}`);
     this.dataService.getDataPointsByCountryYear(this.country, this.year).subscribe(data => this.data = data[0]);
   }
 
@@ -107,7 +106,6 @@ export class CountryYearBarComponent implements OnInit {
   }
 
   private render(): void {
-    console.log(this.data)
     const xScale = d3.scaleBand()
       .domain(this.incomeShareKeysReadable)
       .range([0, this.width - this.margin.right])
@@ -154,7 +152,6 @@ export class CountryYearBarComponent implements OnInit {
       {name: "Middle 40%", value: this.data.incomeShareMid40},
       {name: "Bottom 50%", value: this.data.incomeShareBot50}
     ];
-    console.log(formattedData)
     let colorScale = d3.scaleOrdinal()
       .domain(formattedData.map((d) => d.name))
       .range(this.segmentColors);

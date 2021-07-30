@@ -124,7 +124,6 @@ export class CountryLineComponent implements OnInit {
   }
 
   private getDataPointsByCountry(): void {
-    console.log(`Loading ${this.country}`)
     this.dataService.getDataPointsByCountry(this.country.toString()).subscribe(data => this.data = data);
   }
 
@@ -253,7 +252,6 @@ export class CountryLineComponent implements OnInit {
       .style("stroke-width", 5)
       .style("stroke", (d: any) => colorScale(d[0]))
       .attr("d", (d: any) => {
-        console.log(d)
         return d3.line()
           // @ts-ignore
           .x(d => xScale(parseTime(d.year)))

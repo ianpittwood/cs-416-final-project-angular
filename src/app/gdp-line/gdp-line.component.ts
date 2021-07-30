@@ -163,7 +163,6 @@ export class GdpLineComponent implements OnInit {
 
     let tipMousemove = function(event: { layerX: d3.NumberValue; clientX: number; clientY: number; }, d: CountryYearDataPoint) {
       const year = Math.floor((xScale.invert(event.layerX).getFullYear() + 5) / 10) * 10;
-      console.log(year);
 
       let html = `<div class="color-box" style="background-color: ${colorScale(d.country)}"></div><strong>${d.country}</strong><br>
 GDP per capita: $${d.gdpPerCapita.toFixed(2)}<br>`;
@@ -206,7 +205,6 @@ GDP per capita: $${d.gdpPerCapita.toFixed(2)}<br>`;
       .style("stroke-width", 5)
       .style("stroke", (d: any) => colorScale(d[0]))
       .attr("d", (d: any) => {
-        console.log(d)
         return d3.line()
           // @ts-ignore
           .x(d => xScale(parseTime(d.year)))

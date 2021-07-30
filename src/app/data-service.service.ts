@@ -55,9 +55,6 @@ export class DataServiceService {
       incomeShareNext9Change: endData.incomeShareNext9 - startData.incomeShareNext9,
       incomeShareTop1Change: endData.incomeShareTop1 - startData.incomeShareTop1
     };
-    console.log(startData)
-    console.log(endData)
-    console.log(changeData)
     return of(changeData);
   }
 
@@ -89,7 +86,6 @@ export class DataServiceService {
     dataAggregated.incomeShareTop10 /= data.length;
     dataAggregated.incomeShareNext9 /= data.length;
     dataAggregated.incomeShareTop1 /= data.length;
-    console.log(dataAggregated)
     return of(dataAggregated);
   }
 
