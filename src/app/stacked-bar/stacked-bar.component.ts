@@ -92,8 +92,12 @@ export class StackedBarComponent implements OnInit {
   }
 
   private render(): void {
+    this.data = this.data.sort(function (a, b) {
+      return a.giniCoefficient - b.giniCoefficient;
+    });
+
     const xScale = d3.scaleBand()
-      .domain(this.countries)
+      .domain(this.data.map(d => d.country))
       .range([0, this.width - this.margin.right])
       .padding(0.2);
     const yScale = d3.scaleLinear()
@@ -142,6 +146,7 @@ export class StackedBarComponent implements OnInit {
 Total Population: ${(d.data.totalPopulation/1000000).toFixed(2)} million<br>
 GDP: $${(d.data.gdp/1000000000).toFixed(2)} billion<br>
 GDP per capita: $${d.data.gdpPerCapita.toFixed(2)}<br>
+Gini coefficient: ${d.data.giniCoefficient.toFixed(3)}<br>
 Top 1%: ${d.data.incomeShareTop1.toFixed(2)}%<br>
 Next 9%: ${d.data.incomeShareNext9.toFixed(2)}%<br>
 Middle 40%: ${d.data.incomeShareMid40.toFixed(2)}%<br>

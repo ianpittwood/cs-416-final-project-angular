@@ -40,8 +40,8 @@
       {{country}}'s inequality has gotten
       <span *ngIf="inequalityImproved()">better</span>
       <span *ngIf="!inequalityImproved()">worse</span>
-      since 1980. The Gini coefficient moved by {{this.changeData.giniCoefficientChange.toFixed(3)}},
-      indicating overall
+      since 1980. The Gini coefficient moved by {{this.changeData.giniCoefficientChange.toFixed(3)}}
+      to {{getLatestGiniCoefficient().toFixed(3)}}, indicating overall
       <span *ngIf="inequalityImproved()">improvements leading to increased equality among its population.</span>
       <span *ngIf="!inequalityImproved()">setbacks leading to increased inequality among its population.</span>
     </p>

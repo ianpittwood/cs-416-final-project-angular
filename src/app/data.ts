@@ -526,7 +526,8 @@ export const narrativeFacts = {
     ],
     "Saudi Arabia": [],
     "Mexico": [
-      "Mexico joins NAFTA"
+      "Mexico joins NAFTA",
+      "Mexican Peso crisis"
     ],
     "Republic of Korea": [],
     "Russian Federation": [
@@ -663,13 +664,17 @@ export const narrativeFacts = {
     "Saudi Arabia": [],
     "Mexico": [],
     "Republic of Korea": [],
-    "Russian Federation": []
+    "Russian Federation": [
+      "1998 Russian financial crisis"
+    ]
   },
   1999: {
     "World": [
       "World population reaches 6 billion"
     ],
-    "Argentina": [],
+    "Argentina": [
+      "Argentine economic crisis begins"
+    ],
     "Australia": [],
     "Brazil": [],
     "Canada": [],
@@ -729,7 +734,8 @@ export const narrativeFacts = {
     ],
     "United States": [
       "al-Qaeda suicide bombs the USS Cole",
-      "George W. Bush is elected President after recount in Florida"
+      "George W. Bush is elected President after recount in Florida",
+      "Dot-com bubble bursts"
     ],
     "United Kingdom": [
       "UK launches Operation Palliser; ends the Sierra Leone Civil War"
@@ -786,7 +792,9 @@ export const narrativeFacts = {
       "International Criminal Court established",
       "Steve Fossett becomes the first person to fly solo around the world"
     ],
-    "Argentina": [],
+    "Argentina": [
+      "Argentine economic crisis ends"
+    ],
     "Australia": [],
     "Brazil": [],
     "Canada": [],
@@ -1200,7 +1208,9 @@ export const narrativeFacts = {
     ],
     "Argentina": [],
     "Australia": [],
-    "Brazil": [],
+    "Brazil": [
+      "Brazilian financial crisis begins 2014-2017"
+    ],
     "Canada": [],
     "China": [],
     "European Union": [],
@@ -1224,7 +1234,8 @@ export const narrativeFacts = {
     "Mexico": [],
     "Republic of Korea": [],
     "Russian Federation": [
-      "Russia annexes Crimea"
+      "Russia annexes Crimea",
+      "2014 Russian financial crisis"
     ]
   },
   2015: {

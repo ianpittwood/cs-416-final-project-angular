@@ -25,8 +25,8 @@ export class CountryLineComponent implements OnInit {
   private data: CountryYearDataPoint[] = [];
   private splitData: SplitCountryYearDataPoint[] = [];
   private svg: any;
-  private margin = {top: 20, right: 40, bottom: 50, left: 50};
-  private width = 750;
+  private margin = {top: 20, right: 20, bottom: 50, left: 50};
+  private width = 800;
   private height = 400;
   private incomeShareKeys = ["incomeShareTop1", "incomeShareNext9", "incomeShareMid40", "incomeShareBot50"];
   private incomeShareKeysReadable = [
@@ -102,6 +102,10 @@ export class CountryLineComponent implements OnInit {
 
   public bot50Increased() {
     return this.changeData.incomeShareBot50Change > 0;
+  }
+
+  public getLatestGiniCoefficient() {
+    return this.data.filter(d => d.year === 2019)[0].giniCoefficient
   }
 
   constructor(private route: ActivatedRoute, private dataService: DataServiceService) { }
@@ -258,7 +262,57 @@ export class CountryLineComponent implements OnInit {
           // @ts-ignore
           .y(d => yScale(d.value))
           (d[1])
-      })
+      });
+
+    this.svg
+      .append("line")
+      // @ts-ignore
+      .attr("x1", xScale(parseTime(2007)))
+      .attr("y1", 0 )
+      // @ts-ignore
+      .attr("x2", xScale(parseTime(2007)))
+      .attr("y2", this.height)
+      .style("stroke-width", 2)
+      .style("stroke", "red")
+      .style("fill", "none")
+    // Apply X Axis label
+    this.svg.append("text")
+      .attr("class", "economicEventAnnotation")
+      // @ts-ignore
+      .attr("transform", `translate(${xScale(parseTime(2007)) + 10},0) rotate(-5)`)
+      .text("Great Recession");
+    this.svg
+      .append("line")
+      // @ts-ignore
+      .attr("x1", xScale(parseTime(2000)))
+      .attr("y1", 0)
+      // @ts-ignore
+      .attr("x2", xScale(parseTime(2000)))
+      .attr("y2", this.height)
+      .style("stroke-width", 2)
+      .style("stroke", "red")
+      .style("fill", "none");
+    this.svg.append("text")
+      .attr("class", "economicEventAnnotation")
+      // @ts-ignore
+      .attr("transform", `translate(${xScale(parseTime(2000)) + 10},0) rotate(-5)`)
+      .text("Dot-com Burst");
+    this.svg
+      .append("line")
+      // @ts-ignore
+      .attr("x1", xScale(parseTime(1987)))
+      .attr("y1", 0)
+      // @ts-ignore
+      .attr("x2", xScale(parseTime(1987)))
+      .attr("y2", this.height)
+      .style("stroke-width", 2)
+      .style("stroke", "red")
+      .style("fill", "none");
+    this.svg.append("text")
+      .attr("class", "economicEventAnnotation")
+      // @ts-ignore
+      .attr("transform", `translate(${xScale(parseTime(1987)) + 10},0) rotate(-5)`)
+      .text("Black Monday");
   }
 
 }
